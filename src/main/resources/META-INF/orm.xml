@@ -5,7 +5,7 @@
     http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd" version="2.1">
     <named-query name='Order.findAll'>
         <query>
-            select o from Order o order by o.name
+            select o from Order o where o.status not in ('SHIPPED', 'CANCELLED')
         </query>
     </named-query>
 </entity-mappings>

@@ -17,7 +17,7 @@ public class Order {
     private LocalDate requiredDate;
     private LocalDate shippedDate;
     private String comments;
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "customerId")
     private Customer customer;
     @Enumerated(EnumType.STRING)

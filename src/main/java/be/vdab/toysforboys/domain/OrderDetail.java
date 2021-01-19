@@ -10,6 +10,7 @@ public class OrderDetail {
     private int quantityOrdered;
     private BigDecimal priceEach;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "productid")
     private Product product;
 
     public OrderDetail(int quantityOrdered, BigDecimal priceEach, Product product) {
@@ -36,6 +37,10 @@ public class OrderDetail {
 
     public int getQuantityOrdered() {
         return quantityOrdered;
+    }
+
+    public Product getProduct() {
+        return product;
     }
 
     public BigDecimal getPriceEach() {
