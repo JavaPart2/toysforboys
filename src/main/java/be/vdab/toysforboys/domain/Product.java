@@ -2,6 +2,7 @@ package be.vdab.toysforboys.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -20,6 +21,11 @@ public class Product {
     private ProductLine productLine;
     @Version
     private int version;
+/*
+    @ElementCollection
+    @CollectionTable(name = "orderdetails", joinColumns = @JoinColumn(name = "productId"))
+    private Set<OrderDetail> orderDetails;
+*/
 
     public Product(String name, String scale, String description, int quantityInStock,
                    int quantityInOrder, BigDecimal buyPrice, ProductLine productLine) {

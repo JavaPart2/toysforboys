@@ -1,0 +1,44 @@
+package be.vdab.toysforboys.domain;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Objects;
+
+@Embeddable
+@Access(AccessType.FIELD)
+public class OrderDetail {
+    private int quantityOrdered;
+    private BigDecimal priceEach;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Product product;
+
+    public OrderDetail(int quantityOrdered, BigDecimal priceEach, Product product) {
+        this.quantityOrdered = quantityOrdered;
+        this.priceEach = priceEach;
+    }
+
+    protected OrderDetail() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrderDetail)) return false;
+        OrderDetail that = (OrderDetail) o;
+        return quantityOrdered == that.quantityOrdered &&
+                Objects.equals(priceEach, that.priceEach);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(quantityOrdered, priceEach);
+    }
+
+    public int getQuantityOrdered() {
+        return quantityOrdered;
+    }
+
+    public BigDecimal getPriceEach() {
+        return priceEach;
+    }
+}
