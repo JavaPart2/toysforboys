@@ -43,6 +43,11 @@ public class Order {
     protected Order() {
     }
 
+    public void shipOrder(){
+        this.status = OrderStatus.SHIPPED;
+        this.shippedDate = LocalDate.now();
+    }
+
     public int getId() {
         return id;
     }

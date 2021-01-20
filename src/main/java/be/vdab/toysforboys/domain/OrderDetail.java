@@ -21,6 +21,11 @@ public class OrderDetail {
     protected OrderDetail() {
     }
 
+    public boolean checkProductStock(){
+        return getProduct().checkQuantity(this.quantityOrdered);
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

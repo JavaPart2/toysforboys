@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Toys for Boys</title>
+    <link rel="stylesheet" th:href="@{/css/toysforboys.css}">
+</head>
+<body>
+<h1 th:text="|Order ${order.id}|"></h1>
+
+<label>Ordered:</label>
+<br>
+<span th:text="${order.orderDate}"></span>
+<br>
+<label>Required:</label>
+<br>
+<span th:text="${order.requiredDate}"></span>
+<br>
+<label>Customer:</label>
+<br>
+<span th:text="${order.getCustomer().getName()}"></span>
+<br>
+<label>Comments:</label>
+<br>
+<span th:text="${order.comments}"></span>
+<br>
+<label>Details:</label>
+
+<table>
+    <thead>
+    <tr style="background-color: moccasin">
+        <th>Product</th>
+        <th>Price each</th>
+        <th>Quantity</th>
+        <th>Value</th>
+        <th>Deliverable</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="orderdetail:${order.getOrderDetails()}" th:object="${orderdetail}">
+        <td th:text="*{getProduct().getName()}"></td>
+        <td th:text="*{priceEach}"></td>
+        <td th:text="*{quantityOrdered}"></td>
+        <td th:text="*{priceEach} * *{quantityOrdered}"></td>
+        <td class="status" th:text="*{status}"></td>
+        <td class="ship">
+            <input type="checkbox">
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

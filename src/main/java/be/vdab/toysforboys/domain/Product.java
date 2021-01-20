@@ -21,11 +21,6 @@ public class Product {
     private ProductLine productLine;
     @Version
     private int version;
-/*
-    @ElementCollection
-    @CollectionTable(name = "orderdetails", joinColumns = @JoinColumn(name = "productId"))
-    private Set<OrderDetail> orderDetails;
-*/
 
     public Product(String name, String scale, String description, int quantityInStock,
                    int quantityInOrder, BigDecimal buyPrice, ProductLine productLine) {
@@ -39,6 +34,19 @@ public class Product {
     }
 
     protected Product() {
+    }
+
+    public boolean checkQuantity(int quantityInOrder){
+        if ((quantityInOrder > this.quantityInOrder) ||
+                (quantityInOrder > this.quantityInStock)){
+            return false;
+        }
+        return true;
+    }
+
+    public void updateQuantity(int quantityOrder){
+        this.quantityInStock = this.quantityInStock - quantityOrder;
+        this.quantityInOrder = this.quantityInOrder - quantityOrder;
     }
 
     public int getId() {
