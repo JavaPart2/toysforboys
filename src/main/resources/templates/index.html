@@ -2,38 +2,44 @@
 <html lang="nl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <title>Toys for Boys</title>
     <link rel="stylesheet" th:href="@{/css/toysforboys.css}">
 </head>
 <body>
 <h1>Unshipped Orders</h1>
-
-<table>
-    <thead>
-    <tr style="background-color: moccasin">
-        <th>Id</th>
-        <th>Ordered</th>
-        <th>Required</th>
-        <th>Customer</th>
-        <th>Comments</th>
-        <th>Status</th>
-        <th>Ship</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="order:${orders}" th:object="${order}">
-        <td><a th:text="*{id}" th:href="@{/order/{id}(id=*{id})}"></a></td>
-        <td th:text="*{orderDate}" th:name="*{orderDate}" th:value="*{orderDate}"></td>
-        <td th:text="*{requiredDate}" th:name="*{requiredDate}" th:value="*{requiredDate}"></td>
-        <td th:text="*{getCustomer().getName()}"></td>
-        <td th:text="*{comments}"></td>
-        <td class="status" th:text="*{status}"></td>
-        <td class="ship">
-            <input type="checkbox">
-        </td>
-    </tr>
-    </tbody>
-</table>
+<form method="post" th:action="@{/orders/ship}">
+    <button>Set as shipped</button>
+    <table>
+        <thead>
+        <tr style="background-color: moccasin">
+            <th>Id</th>
+            <th>Ordered</th>
+            <th>Required</th>
+            <th>Customer</th>
+            <th>Comments</th>
+            <th>Status</th>
+            <th>Ship</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order:${orders}" th:object="${order}">
+            <td><a th:text="*{id}" th:href="@{/order/{id}(id=*{id})}"></a></td>
+            <td th:text="*{orderDate}" th:name="*{orderDate}" th:value="*{orderDate}"></td>
+            <td th:text="*{requiredDate}" th:name="*{requiredDate}" th:value="*{requiredDate}"></td>
+            <td th:text="*{getCustomer().getName()}"></td>
+            <td th:text="*{comments}"></td>
+            <td>
+                <img th:src="@{/images/{file}.png(file=*{status})}" alt="I">
+                <span th:text="*{status}"></span>
+            </td>
+            <td class="ship">
+                <input type="checkbox" th:name="*{}" th:value="">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
 
 </body>
 </html>

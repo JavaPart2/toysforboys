@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="nl" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" http-equiv="Content-Type" content="text/html">
+    <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <title>Toys for Boys</title>
     <link rel="stylesheet" th:href="@{/css/toysforboys.css}">
 </head>
@@ -41,14 +42,15 @@
         <td th:text="*{getProduct().getName()}"></td>
         <td th:text="*{priceEach}"></td>
         <td th:text="*{quantityOrdered}"></td>
-        <td th:text="*{priceEach} * *{quantityOrdered}"></td>
-        <td class="status" th:text="*{status}"></td>
-        <td class="ship">
-            <input type="checkbox">
-        </td>
+        <td th:text="${orderdetail.priceEach} * ${orderdetail.quantityOrdered}"></td>
+        <td th:if="${orderdetail.checkProductStock()}">&check;</td>
+        <td th:if="not ${orderdetail.checkProductStock()}">&cross;</td>
     </tr>
     </tbody>
 </table>
+<label>Value:</label>
+<br>
+<span th:text="${totalvalue}"></span>
 
 </body>
 </html>

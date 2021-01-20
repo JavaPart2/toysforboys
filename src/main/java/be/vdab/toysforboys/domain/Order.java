@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "orders")
+@NamedEntityGraph(name = "Order.metCustomer", attributeNodes = @NamedAttributeNode("customer"))
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +47,19 @@ public class Order {
     public void shipOrder(){
         this.status = OrderStatus.SHIPPED;
         this.shippedDate = LocalDate.now();
+    }
+
+    public BigDecimal calculateTotalValue(){
+        BigDecimal totalValue = BigDecimal.ZERO;
+
+        for (OrderDetail orderdetail : this.getOrderDetails()) {
+            BigDecimal detailValue = BigDecimal.ZERO;
+            BigDecimal bigQuantity = BigDecimal.valueOf((long)orderdetail.getQuantityOrdered());
+            detailValue = detailValue.add(orderdetail.getPriceEach()
+                    .multiply(BigDecimal.valueOf((long)orderdetail.getQuantityOrdered())));
+            totalValue = totalValue.add(detailValue);
+        }
+        return totalValue;
     }
 
     public int getId() {
