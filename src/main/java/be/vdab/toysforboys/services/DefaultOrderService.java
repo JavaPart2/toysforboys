@@ -2,14 +2,13 @@ package be.vdab.toysforboys.services;
 
 import be.vdab.toysforboys.domain.Order;
 import be.vdab.toysforboys.domain.OrderDetail;
+import be.vdab.toysforboys.forms.OrderForm;
+import be.vdab.toysforboys.forms.OrderFormList;
 import be.vdab.toysforboys.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -28,8 +27,14 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> findUnshippedOrders() {
-        return repository.findUnshippedOrders();
+    public OrderFormList findUnshippedOrders() {
+        OrderFormList orderForms = new OrderFormList();
+
+        for (Order order: repository.findUnshippedOrders()) {
+            OrderForm orderForm = new OrderForm(order,false);
+            orderForms.addOrderForm(orderForm);
+        }
+        return orderForms;
     }
 
     @Override
@@ -58,5 +63,19 @@ public class DefaultOrderService implements OrderService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public List<Order> shipOrders(OrderFormList orderForms) {
+        List<Order> failedOrders = new ArrayList<>();
+
+        for (OrderForm orderForm : orderForms.getOrderFormList()) {
+            if (orderForm.isShip()){
+                if (!setOrderAsShipped(orderForm.getOrder().getId())){
+                    failedOrders.add(orderForm.getOrder());
+                }
+            }
+        }
+        return failedOrders;
     }
 }

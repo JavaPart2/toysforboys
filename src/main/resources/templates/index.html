@@ -8,6 +8,12 @@
 </head>
 <body>
 <h1>Unshipped Orders</h1>
+<div th:if="${failedOrders}">
+    <h3>Shipping failed for order(s)
+        <span th:each="order:${failedOrders}" th:text="|${order.id}, |"></span>
+        not enough stock
+    </h3>
+</div>
 <form method="post" th:action="@{/orders/ship}">
     <button>Set as shipped</button>
     <table>
@@ -23,7 +29,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="order:${orders}" th:object="${order}">
+        <tr th:each="orderform:${orderforms}" th:object="${orderform.order}">
             <td><a th:text="*{id}" th:href="@{/order/{id}(id=*{id})}"></a></td>
             <td th:text="*{orderDate}" th:name="*{orderDate}" th:value="*{orderDate}"></td>
             <td th:text="*{requiredDate}" th:name="*{requiredDate}" th:value="*{requiredDate}"></td>
@@ -34,7 +40,7 @@
                 <span th:text="*{status}"></span>
             </td>
             <td class="ship">
-                <input type="checkbox" th:name="*{}" th:value="">
+                <input type="checkbox" th:name="${orderform.ship}" th:value="true">
             </td>
         </tr>
         </tbody>
