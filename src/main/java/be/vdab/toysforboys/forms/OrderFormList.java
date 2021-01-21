@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderFormList {
-    private List<OrderForm> orderFormList = new ArrayList<>();
+    private List<OrderForm> formList = new ArrayList<>();
 
-    public OrderFormList(List<OrderForm> orderFormList) {
-        this.orderFormList = orderFormList;
+    public OrderFormList(List<OrderForm> formList) {
+        this.formList = formList;
     }
 
     public OrderFormList() {
     }
 
     public void addOrderForm(OrderForm orderForm){
-        this.orderFormList.add(orderForm);
+        this.formList.add(orderForm);
     }
 
-    public List<OrderForm> getOrderFormList() {
-        return orderFormList;
+    public List<OrderForm> getFormList() {
+        return formList;
     }
 
-    public void setOrderFormList(List<OrderForm> orderFormList) {
-        this.orderFormList = orderFormList;
+    public void setFormList(List<OrderForm> formList) {
+        this.formList = formList;
     }
 }

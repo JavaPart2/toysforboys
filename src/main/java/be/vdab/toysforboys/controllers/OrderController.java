@@ -5,12 +5,14 @@ import be.vdab.toysforboys.forms.OrderForm;
 import be.vdab.toysforboys.forms.OrderFormList;
 import be.vdab.toysforboys.services.OrderService;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +30,6 @@ public class OrderController {
     public ModelAndView index(){
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("orderforms", orderService.findUnshippedOrders());
-        modelAndView.addObject("failedOrders", null);
         return modelAndView;
     }
 
@@ -43,10 +44,10 @@ public class OrderController {
     }
 
     @PostMapping("orders/ship")
-    public ModelAndView shipOrder(OrderFormList orderFormList){
+    public ModelAndView shipOrder(@Valid OrderFormList orderForms, Errors errors){
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("failedOrders",
-                orderService.shipOrders(orderFormList));
+                orderService.shipOrders(orderForms));
         modelAndView.addObject("orderforms", orderService.findUnshippedOrders());
         return modelAndView;
     }

@@ -41,7 +41,7 @@ public class Order {
         this.orderDetails = new LinkedHashSet<>();
     }
 
-    protected Order() {
+    public Order() {
     }
 
     public void shipOrder(){

@@ -69,7 +69,7 @@ public class DefaultOrderService implements OrderService {
     public List<Order> shipOrders(OrderFormList orderForms) {
         List<Order> failedOrders = new ArrayList<>();
 
-        for (OrderForm orderForm : orderForms.getOrderFormList()) {
+        for (OrderForm orderForm : orderForms.getFormList()) {
             if (orderForm.isShip()){
                 if (!setOrderAsShipped(orderForm.getOrder().getId())){
                     failedOrders.add(orderForm.getOrder());

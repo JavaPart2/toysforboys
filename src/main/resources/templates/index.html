@@ -8,13 +8,15 @@
 </head>
 <body>
 <h1>Unshipped Orders</h1>
+
 <div th:if="${failedOrders}">
     <h3>Shipping failed for order(s)
-        <span th:each="order:${failedOrders}" th:text="|${order.id}, |"></span>
+        <span th:each="forder:${failedOrders}" th:text="|${forder.id}, |"></span>
         not enough stock
     </h3>
 </div>
-<form method="post" th:action="@{/orders/ship}">
+
+<form th:object="${orderforms}" method="post" th:action="@{/orders/ship}">
     <button>Set as shipped</button>
     <table>
         <thead>
@@ -29,15 +31,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="orderform:${orderforms}" th:object="${orderform.order}">
-            <td><a th:text="*{id}" th:href="@{/order/{id}(id=*{id})}"></a></td>
+        <tr th:each="orderform:${orderforms.formList}" th:object="${orderform.order}">
+            <td><a th:text="*{id}" th:name="*{id}" th:value="*{id}" th:href="@{/order/{id}(id=*{id})}"></a></td>
             <td th:text="*{orderDate}" th:name="*{orderDate}" th:value="*{orderDate}"></td>
             <td th:text="*{requiredDate}" th:name="*{requiredDate}" th:value="*{requiredDate}"></td>
             <td th:text="*{getCustomer().getName()}"></td>
-            <td th:text="*{comments}"></td>
+            <td th:text="*{comments}" th:field="*{comments}"></td>
             <td>
                 <img th:src="@{/images/{file}.png(file=*{status})}" alt="I">
-                <span th:text="*{status}"></span>
+                <span th:text="*{status}" th:field="*{status}"></span>
             </td>
             <td class="ship">
                 <input type="checkbox" th:name="${orderform.ship}" th:value="true">

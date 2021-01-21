@@ -11,7 +11,7 @@ public class OrderForm {
         this.ship = ship;
     }
 
-    protected OrderForm() {
+    public OrderForm() {
     }
 
     public Order getOrder() {
