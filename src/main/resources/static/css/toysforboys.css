@@ -1,0 +1,62 @@
+body {
+    font-family: sans-serif;
+}
+
+label {
+    display: block;
+    margin-top: 1em;
+}
+
+button {
+    display: block;
+    margin-bottom: 1em;
+    margin-top: 0.2em;
+}
+
+table{
+    border-collapse: collapse;
+}
+
+th, td{
+    border: 1px solid gray;
+}
+
+thead{
+    background-color: darkgrey;
+    color: white;
+}
+
+.prijs {
+    text-align: right;
+}
+
+tbody > tr:nth-child(even) {
+    background-color: aliceblue;
+}
+
+tbody > tr:nth-child(odd) {
+    background-color: lavender;
+}
+
+.failedorder{
+    color: red;
+}
+
+.check{
+    text-align: center;
+    color: green;
+}
+
+.cross{
+    text-align: center;
+    color: red;
+}
+
+.orderdata span{
+    font-weight: bold;
+}
+
+.product tbody{
+    font-weight: bold;
+    text-align: right;
+}

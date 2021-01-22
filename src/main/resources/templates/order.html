@@ -9,48 +9,50 @@
 <body>
 <h1 th:text="|Order ${order.id}|"></h1>
 
-<label>Ordered:</label>
-<br>
-<span th:text="${order.orderDate}"></span>
-<br>
-<label>Required:</label>
-<br>
-<span th:text="${order.requiredDate}"></span>
-<br>
-<label>Customer:</label>
-<br>
-<span th:text="${order.getCustomer().getName()}"></span>
-<br>
-<label>Comments:</label>
-<br>
-<span th:text="${order.comments}"></span>
-<br>
-<label>Details:</label>
+<div class="orderdata">
+    <label>Ordered:</label>
+    <span th:text="${{order.orderDate}}"></span>
+    <label>Required:</label>
+    <span th:text="${{order.requiredDate}}"></span>
+    <label>Customer:</label>
+    <span th:text="${order.getCustomer().getName()}"></span>
+    <br>
+    <span th:text="${order.getCustomer().getStreetAndNumber()}"></span>
+    <br>
+    <span th:text="${order.getCustomer().getPostalCode()}"></span>
+    <span th:text="| ${order.getCustomer().getCity()} |"></span>
+    <span th:text="${order.getCustomer().getState()}"></span>
+    <br>
+    <span th:text="${order.getCustomer().getCountry().name}"></span>
+    <label>Comments:</label>
+    <span th:text="${order.comments}"></span>
+    <label>Details:</label>
 
-<table>
-    <thead>
-    <tr style="background-color: moccasin">
-        <th>Product</th>
-        <th>Price each</th>
-        <th>Quantity</th>
-        <th>Value</th>
-        <th>Deliverable</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="orderdetail:${order.getOrderDetails()}" th:object="${orderdetail}">
-        <td th:text="*{getProduct().getName()}"></td>
-        <td th:text="*{priceEach}"></td>
-        <td th:text="*{quantityOrdered}"></td>
-        <td th:text="${orderdetail.priceEach} * ${orderdetail.quantityOrdered}"></td>
-        <td th:if="${orderdetail.checkProductStock()}">&check;</td>
-        <td th:if="not ${orderdetail.checkProductStock()}">&cross;</td>
-    </tr>
-    </tbody>
-</table>
-<label>Value:</label>
-<br>
-<span th:text="${totalvalue}"></span>
+    <table class="product">
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price each</th>
+            <th>Quantity</th>
+            <th>Value</th>
+            <th>Deliverable</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderdetail:${order.getOrderDetails()}" th:object="${orderdetail}">
+            <td th:text="*{getProduct().getName()}"></td>
+            <td th:text="*{{priceEach}}"></td>
+            <td th:text="*{quantityOrdered}"></td>
+            <td style="width: 5em" th:text="${orderdetail.priceEach} * ${orderdetail.quantityOrdered}"
+                type></td>
+            <td class="check" th:if="${orderdetail.checkProductStock()}">&check;</td>
+            <td class="cross" th:if="not ${orderdetail.checkProductStock()}">&cross;</td>
+        </tr>
+        </tbody>
+    </table>
+    <label>Value:</label>
+    <span th:text="${totalvalue}"></span>
+</div>
 
 </body>
 </html>

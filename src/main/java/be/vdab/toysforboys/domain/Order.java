@@ -1,5 +1,7 @@
 package be.vdab.toysforboys.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,7 +16,9 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @DateTimeFormat(style = "S-")
     private LocalDate orderDate;
+    @DateTimeFormat(style = "S-")
     private LocalDate requiredDate;
     private LocalDate shippedDate;
     private String comments;
