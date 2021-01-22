@@ -7,25 +7,23 @@
     <link rel="stylesheet" th:href="@{/css/toysforboys.css}">
 </head>
 <body>
-<h1 th:text="|Order ${order.id}|"></h1>
+<h1 th:text="|Order ${orderinfo.orderid}|"></h1>
 
 <div class="orderdata">
     <label>Ordered:</label>
-    <span th:text="${{order.orderDate}}"></span>
+    <span th:text="${{orderinfo.ordered}}"></span>
     <label>Required:</label>
-    <span th:text="${{order.requiredDate}}"></span>
+    <span th:text="${{orderinfo.required}}"></span>
     <label>Customer:</label>
-    <span th:text="${order.getCustomer().getName()}"></span>
+    <span th:text="${orderinfo.customerName}"></span>
     <br>
-    <span th:text="${order.getCustomer().getStreetAndNumber()}"></span>
+    <span th:text="${orderinfo.customerStreet}"></span>
     <br>
-    <span th:text="${order.getCustomer().getPostalCode()}"></span>
-    <span th:text="| ${order.getCustomer().getCity()} |"></span>
-    <span th:text="${order.getCustomer().getState()}"></span>
+    <span th:text="${orderinfo.customerCityState}"></span>
     <br>
-    <span th:text="${order.getCustomer().getCountry().name}"></span>
+    <span th:text="${orderinfo.customerCountry}"></span>
     <label>Comments:</label>
-    <span th:text="${order.comments}"></span>
+    <span th:text="${orderinfo.comments}"></span>
     <label>Details:</label>
 
     <table class="product">
@@ -39,19 +37,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="orderdetail:${order.getOrderDetails()}" th:object="${orderdetail}">
-            <td th:text="*{getProduct().getName()}"></td>
+        <tr th:each="orderdetail:${orderinfo.formList}" th:object="${orderdetail}">
+            <td th:text="*{productname}"></td>
             <td th:text="*{{priceEach}}"></td>
-            <td th:text="*{quantityOrdered}"></td>
-            <td style="width: 5em" th:text="${orderdetail.priceEach} * ${orderdetail.quantityOrdered}"
-                type></td>
-            <td class="check" th:if="${orderdetail.checkProductStock()}">&check;</td>
-            <td class="cross" th:if="not ${orderdetail.checkProductStock()}">&cross;</td>
+            <td th:text="*{quantity}"></td>
+            <td style="width: 5em" th:text="*{{value}}"></td>
+            <td class="check" th:if="*{deliverable}">&check;</td>
+            <td class="cross" th:if="not *{deliverable}">&cross;</td>
         </tr>
         </tbody>
     </table>
     <label>Value:</label>
-    <span th:text="${totalvalue}"></span>
+    <span th:text="${{orderinfo.totalValue}}"></span>
 </div>
 
 </body>

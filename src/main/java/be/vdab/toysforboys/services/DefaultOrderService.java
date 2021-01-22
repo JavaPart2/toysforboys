@@ -2,12 +2,15 @@ package be.vdab.toysforboys.services;
 
 import be.vdab.toysforboys.domain.Order;
 import be.vdab.toysforboys.domain.OrderDetail;
+import be.vdab.toysforboys.forms.OrderDetailForm;
 import be.vdab.toysforboys.forms.OrderForm;
 import be.vdab.toysforboys.forms.OrderFormList;
+import be.vdab.toysforboys.forms.OrderInfoForm;
 import be.vdab.toysforboys.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -21,8 +24,31 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Order> findById(int id) {
-        return repository.findOrderById(id);
+    public OrderInfoForm findById(int id) {
+        OrderInfoForm orderInfoForm = new OrderInfoForm();
+        repository.findOrderById(id).ifPresent(order -> {
+            orderInfoForm.setOrderid(order.getId());
+            orderInfoForm.setOrdered(order.getOrderDate());
+            orderInfoForm.setRequired(order.getRequiredDate());
+            orderInfoForm.setCustomerName(order.getCustomer().getName());
+            orderInfoForm.setCustomerStreet(order.getCustomer().getStreetAndNumber());
+            orderInfoForm.setCustomerCityState(order.getCustomer().getPostalCode() + " " +
+                    order.getCustomer().getCity() + " " + order.getCustomer().getState());
+            orderInfoForm.setCustomerCountry(order.getCustomer().getCountry().getName());
+            orderInfoForm.setComments(order.getComments());
+            orderInfoForm.setTotalValue(BigDecimal.ZERO);
+            for (OrderDetail orderDetail: order.getOrderDetails()) {
+                OrderDetailForm orderDetailForm = new OrderDetailForm();
+                orderDetailForm.setProductname(orderDetail.getProduct().getName());
+                orderDetailForm.setPriceEach(orderDetail.getPriceEach());
+                orderDetailForm.setQuantity(orderDetail.getQuantityOrdered());
+                orderDetailForm.setValue(orderDetail.calculateDetailValue());
+                orderDetailForm.setDeliverable(orderDetail.checkProductStock());
+                orderInfoForm.addOrderDetailForm(orderDetailForm);
+                orderInfoForm.setTotalValue(orderInfoForm.getTotalValue().add(orderDetail.calculateDetailValue()));
+            }
+        });
+        return orderInfoForm;
     }
 
     @Override
@@ -31,7 +57,14 @@ public class DefaultOrderService implements OrderService {
         OrderFormList orderForms = new OrderFormList();
 
         for (Order order: repository.findUnshippedOrders()) {
-            OrderForm orderForm = new OrderForm(order,false);
+            OrderForm orderForm = new OrderForm();
+            orderForm.setOrderId(order.getId());
+            orderForm.setOrdered(order.getOrderDate());
+            orderForm.setRequired(order.getRequiredDate());
+            orderForm.setCustomerName(order.getCustomer().getName());
+            orderForm.setComments(order.getComments());
+            orderForm.setStatus(order.getStatus());
+            orderForm.setShip(false);
             orderForms.addOrderForm(orderForm);
         }
         return orderForms;
@@ -71,8 +104,8 @@ public class DefaultOrderService implements OrderService {
 
         for (OrderForm orderForm : orderForms.getFormList()) {
             if (orderForm.isShip()){
-                if (!setOrderAsShipped(orderForm.getOrder().getId())){
-                    failedOrders.add(orderForm.getOrder());
+                if (!setOrderAsShipped(orderForm.getOrderId())){
+                    failedOrders.add(repository.findOrderById(orderForm.getOrderId()).get());
                 }
             }
         }

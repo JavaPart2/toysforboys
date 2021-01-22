@@ -54,4 +54,11 @@ public class OrderDetail {
     public BigDecimal getPriceEach() {
         return priceEach;
     }
+
+    public BigDecimal calculateDetailValue(){
+        BigDecimal detailValue = BigDecimal.ZERO;
+
+        detailValue = detailValue.add(BigDecimal.valueOf(this.quantityOrdered).multiply(this.priceEach));
+        return detailValue;
+    }
 }

@@ -29,10 +29,7 @@ public class OrderController {
     @GetMapping("order/{id}")
     public ModelAndView orderDetail(@PathVariable int id){
         ModelAndView modelAndView = new ModelAndView("order");
-        orderService.findById(id).ifPresent(order -> {
-            modelAndView.addObject("order", order);
-            modelAndView.addObject("totalvalue", order.calculateTotalValue());
-        });
+        modelAndView.addObject("orderinfo",orderService.findById(id));
         return modelAndView;
     }
 
