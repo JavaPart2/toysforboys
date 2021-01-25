@@ -36,7 +36,7 @@ public class OrderController {
         return modelAndView;
     }
 
-    @GetMapping("orders/ship")
+    @PostMapping("orders/ship")
     public ModelAndView shipOrder(@Valid OrderFormList orderForms, Errors errors){
         ModelAndView modelAndView = new ModelAndView("index");
         if (!errors.hasErrors()){
