@@ -1,5 +1,7 @@
 package be.vdab.toysforboys.controllers;
 
+import be.vdab.toysforboys.domain.Order;
+import be.vdab.toysforboys.forms.OrderForm;
 import be.vdab.toysforboys.forms.OrderFormList;
 import be.vdab.toysforboys.services.OrderService;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -22,7 +25,7 @@ public class OrderController {
     @GetMapping
     public ModelAndView index(){
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("orderforms", orderService.findUnshippedOrders());
+        modelAndView.addObject(orderService.findUnshippedOrders());
         return modelAndView;
     }
 
@@ -33,19 +36,24 @@ public class OrderController {
         return modelAndView;
     }
 
-    @PostMapping("orders/ship")
+    @GetMapping("orders/ship")
     public ModelAndView shipOrder(@Valid OrderFormList orderForms, Errors errors){
         ModelAndView modelAndView = new ModelAndView("index");
         if (!errors.hasErrors()){
-            modelAndView.addObject("failedOrders",
-                    orderService.shipOrders(orderForms));
+            List<Order> failedOrderList = orderService.shipOrders(orderForms);
+            modelAndView.addObject("failedOrders", failedOrderList);
+            if (failedOrderList.size() > 0){
+                modelAndView.addObject("fOrders", failedOrderList.size());
+            }
         }
-        modelAndView.addObject("orderforms", orderService.findUnshippedOrders());
+        modelAndView.addObject(orderService.findUnshippedOrders());
         return modelAndView;
     }
 
+/*
     @InitBinder("orderforms")
     void initBinder(DataBinder binder){
         binder.initDirectFieldAccess();
     }
+*/
 }

@@ -48,10 +48,11 @@ public class Customer {
     }
 
     public String getState() {
-        if (this.state.equals("")){
+        if (this.state == null){
             return " ";
+        } else {
+            return state;
         }
-        return state;
     }
 
     public String getPostalCode() {

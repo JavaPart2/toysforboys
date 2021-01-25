@@ -9,14 +9,14 @@
 <body>
 <h1>Unshipped Orders</h1>
 
-<div class="failedorder" th:if="${failedOrders.size() > 0}">
+<div class="failedorder" th:if="${fOrders}">
     <h3>Shipping failed for order(s)
         <span th:each="forder:${failedOrders}" th:text="|${forder.id}, |"></span>
         not enough stock
     </h3>
 </div>
 
-<form th:object="${orderforms}" method="post" th:action="@{/orders/ship}">
+<form th:object="${orderFormList}" method="post" th:action="@{/orders/ship}">
     <button>Set as shipped</button>
     <table>
         <thead>
@@ -31,20 +31,32 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="orderform:${orderforms.formList}" th:object="${orderform}">
+        <tr th:each="orderform:${orderFormList.formList}" th:object="${orderform}">
             <td style="text-align: right">
-                <a th:text="*{orderId}" th:name="*{orderId}" th:value="*{orderId}" th:href="@{/order/{id}(id=*{orderId})}"></a>
+                <a th:text="*{orderId}" th:href="@{/order/{id}(id=*{orderId})}">
+                    <input type="hidden" th:field="*{orderId}">
+                </a>
             </td>
-            <td style="text-align: right; width: 5em" th:text="*{{ordered}}" th:name="*{ordered}" th:value="*{ordered}"></td>
-            <td style="text-align: right; width: 5em" th:text="*{{required}}" th:name="*{required}" th:value="*{required}"></td>
-            <td th:text="*{customerName}"></td>
-            <td style="width: 20em" th:text="*{comments}" th:field="*{comments}"></td>
+            <td style="text-align: right; width: 5em" th:text="*{{ordered}}">
+                <input type="hidden" th:field="*{ordered}">
+            </td>
+            <td style="text-align: right; width: 5em" th:text="*{{required}}">
+                <input type="hidden" th:field="*{required}">
+            </td>
+            <td th:text="*{customerName}">
+                <input type="hidden" th:field="*{customerName}">
+            </td>
+            <td style="width: 20em" th:text="*{comments}">
+                <input type="hidden" th:field="*{comments}">
+            </td>
             <td>
                 <img th:src="@{/images/{file}.png(file=*{status})}" alt="I">
-                <span th:text="*{status}" th:field="*{status}"></span>
+                <span th:text="*{status}">
+                    <input type="hidden" th:field="*{status}">
+                </span>
             </td>
             <td>
-                <input type="checkbox" th:name="*{ship}" th:value="true">
+                <input type="checkbox" th:name="${orderform.ship}">
             </td>
         </tr>
         </tbody>
