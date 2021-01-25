@@ -1,5 +1,6 @@
 package be.vdab.toysforboys.forms;
 
+import be.vdab.toysforboys.domain.OrderStatus;
 import org.springframework.format.annotation.NumberFormat;
 
 import java.math.BigDecimal;
@@ -19,6 +20,8 @@ public class OrderInfoForm {
     private List<OrderDetailForm> formList = new ArrayList<>();
     @NumberFormat(pattern = "0.00")
     private BigDecimal totalValue;
+    private OrderStatus status;
+    private LocalDate shippedDate;
 
     public OrderInfoForm(int orderid, LocalDate ordered, LocalDate required, String customerName,
                          String customerStreet, String customerCityState, String customerCountry,
@@ -36,6 +39,22 @@ public class OrderInfoForm {
     }
 
     public OrderInfoForm() {
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public LocalDate getShippedDate() {
+        return shippedDate;
+    }
+
+    public void setShippedDate(LocalDate shippedDate) {
+        this.shippedDate = shippedDate;
     }
 
     public BigDecimal getTotalValue() {

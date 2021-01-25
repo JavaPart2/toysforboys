@@ -37,6 +37,8 @@ public class DefaultOrderService implements OrderService {
             orderInfoForm.setCustomerCountry(order.getCustomer().getCountry().getName());
             orderInfoForm.setComments(order.getComments());
             orderInfoForm.setTotalValue(BigDecimal.ZERO);
+            orderInfoForm.setStatus(order.getStatus());
+            orderInfoForm.setShippedDate(order.getShippedDate());
             for (OrderDetail orderDetail: order.getOrderDetails()) {
                 OrderDetailForm orderDetailForm = new OrderDetailForm();
                 orderDetailForm.setProductname(orderDetail.getProduct().getName());
@@ -99,6 +101,7 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
+    @Transactional
     public List<Order> shipOrders(OrderFormList orderForms) {
         List<Order> failedOrders = new ArrayList<>();
 

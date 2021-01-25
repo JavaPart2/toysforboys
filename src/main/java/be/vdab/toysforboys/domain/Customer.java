@@ -48,6 +48,9 @@ public class Customer {
     }
 
     public String getState() {
+        if (this.state.equals("")){
+            return " ";
+        }
         return state;
     }
 

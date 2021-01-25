@@ -36,13 +36,15 @@ public class OrderController {
     @PostMapping("orders/ship")
     public ModelAndView shipOrder(@Valid OrderFormList orderForms, Errors errors){
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("failedOrders",
-                orderService.shipOrders(orderForms));
+        if (!errors.hasErrors()){
+            modelAndView.addObject("failedOrders",
+                    orderService.shipOrders(orderForms));
+        }
         modelAndView.addObject("orderforms", orderService.findUnshippedOrders());
         return modelAndView;
     }
 
-    @InitBinder("orderForms")
+    @InitBinder("orderforms")
     void initBinder(DataBinder binder){
         binder.initDirectFieldAccess();
     }

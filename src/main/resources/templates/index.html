@@ -9,7 +9,7 @@
 <body>
 <h1>Unshipped Orders</h1>
 
-<div class="failedorder" th:if="${failedOrders}">
+<div class="failedorder" th:if="${failedOrders.size() > 0}">
     <h3>Shipping failed for order(s)
         <span th:each="forder:${failedOrders}" th:text="|${forder.id}, |"></span>
         not enough stock
