@@ -7,6 +7,7 @@ import be.vdab.toysforboys.forms.OrderForm;
 import be.vdab.toysforboys.forms.OrderFormList;
 import be.vdab.toysforboys.forms.OrderInfoForm;
 import be.vdab.toysforboys.repositories.OrderRepository;
+import be.vdab.toysforboys.sessions.CheckedOrders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +56,7 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public OrderFormList findUnshippedOrders() {
+    public OrderFormList findUnshippedOrders(CheckedOrders checkedOrders) {
         OrderFormList orderForms = new OrderFormList();
 
         for (Order order: repository.findUnshippedOrders()) {
@@ -66,7 +67,7 @@ public class DefaultOrderService implements OrderService {
             orderForm.setCustomerName(order.getCustomer().getName());
             orderForm.setComments(order.getComments());
             orderForm.setStatus(order.getStatus());
-            orderForm.setShip(false);
+            orderForm.setShip(checkedOrders.isOrderChecked(order.getId()));
             orderForms.addOrderForm(orderForm);
         }
         return orderForms;
@@ -102,7 +103,9 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     @Transactional
-    public List<Order> shipOrders(OrderFormList orderForms) {
+    public List<Order> shipOrders(CheckedOrders checkedOrders) {
+        OrderFormList orderForms = findUnshippedOrders(checkedOrders);
+
         List<Order> failedOrders = new ArrayList<>();
 
         for (OrderForm orderForm : orderForms.getFormList()) {

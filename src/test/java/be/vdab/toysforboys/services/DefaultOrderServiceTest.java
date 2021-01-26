@@ -3,6 +3,7 @@ package be.vdab.toysforboys.services;
 import be.vdab.toysforboys.domain.OrderStatus;
 import be.vdab.toysforboys.forms.OrderFormList;
 import be.vdab.toysforboys.forms.OrderInfoForm;
+import be.vdab.toysforboys.sessions.CheckedOrders;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,18 +35,22 @@ public class DefaultOrderServiceTest extends AbstractTransactionalJUnit4SpringCo
 
     @Test
     void shipOrdersWithFailedOrder(){
-        OrderFormList testOrderList = service.findUnshippedOrders();
+        CheckedOrders checkedOrders = new CheckedOrders();
+        OrderFormList testOrderList = service.findUnshippedOrders(checkedOrders);
         // Set order 8 shipped
-        testOrderList.getFormList().get(6).setShip(true);
-        assertThat(service.shipOrders(testOrderList).get(0).getId()).isEqualTo(8);
+        checkedOrders.voegToe(8);
+//        testOrderList.getFormList().get(6).setShip(true);
+        assertThat(service.shipOrders(checkedOrders).get(0).getId()).isEqualTo(8);
     }
 
     @Test
     void shipOrdersWithNoFailedOrder(){
-        OrderFormList testOrderList = service.findUnshippedOrders();
+        CheckedOrders checkedOrders = new CheckedOrders();
+        OrderFormList testOrderList = service.findUnshippedOrders(checkedOrders);
         // Set order 3 shipped
-        testOrderList.getFormList().get(2).setShip(true);
-        service.shipOrders(testOrderList);
+        checkedOrders.voegToe(3);
+//        testOrderList.getFormList().get(2).setShip(true);
+        service.shipOrders(checkedOrders);
         // Check order data
         assertThat(service.findById(3).getStatus()).isEqualTo(OrderStatus.SHIPPED);
         assertThat(service.findById(3).getShippedDate()).isToday();
